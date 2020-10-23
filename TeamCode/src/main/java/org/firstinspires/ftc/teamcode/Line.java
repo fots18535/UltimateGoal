@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
-public class Steer extends LinearOpMode {
+public class Line extends LinearOpMode {
     DcMotor leftMotor;
     DcMotor rightMotor;
 
@@ -18,13 +18,19 @@ public class Steer extends LinearOpMode {
 
         waitForStart();
 
+        // Reset the encoder to 0
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftMotor.setPower(1);
+        rightMotor.setPower(1);
+
+
         while(opModeIsActive()) {
-
-            float y = gamepad1.right_stick_y;
-            rightMotor.setPower(y);
-
-            float x = gamepad1.left_stick_y;
-            leftMotor.setPower(x);
+            if (leftMotor.getCurrentPosition() < -8202){
+                break;
+            }
 
             idle();
         }
