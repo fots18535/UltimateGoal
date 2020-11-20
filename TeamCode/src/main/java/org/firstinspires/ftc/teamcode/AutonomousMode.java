@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,55 +12,82 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 @Autonomous
 public class AutonomousMode extends LinearOpMode {
-    DcMotor leftMotor;
-    DcMotor rightMotor;
+    DcMotor leftBack;
+    DcMotor leftFront;
+    DcMotor rightBack;
+    DcMotor rightFront;
     NormalizedColorSensor sensorColor;
-    float ticksPerInch = -102.2f;
+    Gyro gyro;
+
+    float ticksPerInch = -122.15f;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
-        rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        gyro = new Gyro(imu, this);
+
+        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         sensorColor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
+        gyro.StartGyro();
+        
+        turnRight(100, 1);
 
-        forward(1.0, 64);
+      //  forwardColor(1.0);
+
+        //forward(1.0, 24);
+        // 64
 
         // TODO: Shoot 3 rings
-        sleep(3000);
+        //sleep(3000);
 
         // Park on the line
-        forward(1.0, 12);
+        //forward(1.0, 12);
     }
 
     public void forward(double power, double length){
         // Reset the encoder to 0
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Tells the motor to run until we turn it off
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftMotor.setPower(power);
-        rightMotor.setPower(power);
+        // Setting the motor power based on the input
+        leftBack.setPower(1);
+        leftFront.setPower(1);
+        rightBack.setPower(-1);
+        rightFront.setPower(-1);
+
 
         // Go forward and park behind the line
         while(opModeIsActive()) {
-            if (leftMotor.getCurrentPosition() < length*ticksPerInch){
+            if (rightBack.getCurrentPosition() < length*ticksPerInch){
                 break;
             }
 
             idle();
         }
-        leftMotor.setPower(0.0);
-        rightMotor.setPower(0.0);
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
     }
 
     public void forwardColor (double power){
-        leftMotor.setPower(power);
-        rightMotor.setPower(power);
+        leftBack.setPower(1);
+        leftFront.setPower(1);
+        rightBack.setPower(-1);
+        rightFront.setPower(-1);
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
 
@@ -81,11 +109,34 @@ public class AutonomousMode extends LinearOpMode {
 
             idle();
         }
-        leftMotor.setPower(0.0);
-        rightMotor.setPower(0.0);
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
     }
 
+    public void turnRight(double howFar, double speed) {
+        gyro.resetWithDirection(Gyro.RIGHT);
+        leftBack.setPower(-1);
+        leftFront.setPower(-1);
+        rightBack.setPower(-1);
+        rightFront.setPower(-1);
 
+        // Go forward and park behind the line
+        while(opModeIsActive()) {
+            if (gyro.getAngle()>= howFar){
+                break;
+            }
+
+            idle();
+        }
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+    }
 
 }
 
