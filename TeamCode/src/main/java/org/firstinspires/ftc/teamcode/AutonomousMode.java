@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,8 +39,10 @@ public class AutonomousMode extends LinearOpMode {
 
         waitForStart();
         gyro.StartGyro();
+
+        turnLeft (200, 1);
         
-        turnRight(100, 1);
+       // turnRight(100, 1);
 
       //  forwardColor(1.0);
 
@@ -122,6 +123,28 @@ public class AutonomousMode extends LinearOpMode {
         leftFront.setPower(-1);
         rightBack.setPower(-1);
         rightFront.setPower(-1);
+
+        // Go forward and park behind the line
+        while(opModeIsActive()) {
+            if (gyro.getAngle()<= -howFar){
+                break;
+            }
+
+            idle();
+        }
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+    }
+
+    public void turnLeft(double howFar, double speed) {
+        gyro.resetWithDirection(Gyro.LEFT);
+        leftBack.setPower(1);
+        leftFront.setPower(1);
+        rightBack.setPower(1);
+        rightFront.setPower(1);
 
         // Go forward and park behind the line
         while(opModeIsActive()) {
