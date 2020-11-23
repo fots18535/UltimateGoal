@@ -27,7 +27,7 @@ public class Gyro {
 
 
     public Gyro2 getMiniGyro() {
-        return new Gyro2(this.gyro);
+        return new Gyro2(this.gyro, opMode);
     }
 
     public void resetWithDirection(int dir) {
