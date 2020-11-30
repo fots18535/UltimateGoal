@@ -68,20 +68,21 @@ public class AutonomousMode extends LinearOpMode {
 
         // Go forward and park behind the line
         while(opModeIsActive()) {
+            //absolute value of getCurrentPosition() DO NEXT TIME1!!!!!!!!!!!!!!!!
             if (rightBack.getCurrentPosition() < length*ticksPerInch){
                 break;
             }
 
             // Check the angle and correct if needed
-            if (gyro.getAngle() >3) {
+            if (gyro.getAngle() >4) {
                 gyro.store();
-                turnRight(2, .25);
-                gyro.load();
+                turnRight(3, .3);
+                gyro.recall();
                 motorsForward(1);
-            } else if (gyro.getAngle() <-3) {
+            } else if (gyro.getAngle() <-4) {
                 gyro.store();
-                turnLeft(2, .25);
-                gyro.load();
+                turnLeft(3, .3);
+                gyro.recall();
                 motorsForward(1);
             }
 
@@ -96,17 +97,14 @@ public class AutonomousMode extends LinearOpMode {
     }
 
     public void motorsForward( double power) {
-        leftBack.setPower(power);
-        leftFront.setPower(power);
-        rightBack.setPower(-power);
-        rightFront.setPower(-power);
+        leftBack.setPower(-power);
+        leftFront.setPower(-power);
+        rightBack.setPower(power);
+        rightFront.setPower(power);
     }
 
     public void forwardColor (double power){
-        leftBack.setPower(power);
-        leftFront.setPower(power);
-        rightBack.setPower(-power);
-        rightFront.setPower(-power);
+       motorsForward(power);
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
 

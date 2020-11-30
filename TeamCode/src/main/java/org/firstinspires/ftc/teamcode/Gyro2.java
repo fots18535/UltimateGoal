@@ -30,7 +30,7 @@ public class Gyro2 {
         storedAngle = angle;
     }
 
-    public void load() {
+    public void recall() {
         angle = storedAngle;
     }
 
