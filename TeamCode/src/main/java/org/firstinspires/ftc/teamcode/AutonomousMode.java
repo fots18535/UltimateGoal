@@ -68,8 +68,13 @@ public class AutonomousMode extends LinearOpMode {
 
         // Go forward and park behind the line
         while(opModeIsActive()) {
-            //absolute value of getCurrentPosition() DO NEXT TIME1!!!!!!!!!!!!!!!!
-            if (rightBack.getCurrentPosition() < length*ticksPerInch){
+            //absolute value of getCurrentPosition()
+            int tics = rightBack.getCurrentPosition();
+            if (tics < 0) {
+                tics = tics * -1;
+            }
+
+            if (tics > length*ticksPerInch){
                 break;
             }
 
