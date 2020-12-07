@@ -96,6 +96,10 @@ public class Graph {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
+    public Graph(LinearOpMode opMode1) {
+        opMode = opMode1;
+    }
+
     public void turnOn () {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -237,7 +241,7 @@ public GraphResult getPosition() {
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                opMode.telemetry.addData("Visible Target", trackable.getName());
+                // opMode.telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
@@ -254,20 +258,20 @@ public GraphResult getPosition() {
         if (targetVisible) {
             // express position (translation) of robot in inches.
             VectorF translation = lastLocation.getTranslation();
-            opMode.telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+            // opMode.telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                   // translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
             result.x = translation.get(0) / mmPerInch;
             result.y = translation.get(1) / mmPerInch;
 
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            opMode.telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+           // opMode.telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             result.orientation = rotation.thirdAngle;
             result.imageSee = true;
         } else {
-            opMode.telemetry.addData("Visible Target", "none");
+            // opMode.telemetry.addData("Visible Target", "none");
         }
-        opMode.telemetry.update();
+       //  opMode.telemetry.update();
 
         return result;
 }
