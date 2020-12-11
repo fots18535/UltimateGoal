@@ -24,6 +24,8 @@ public class AutonomousMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         gyro = new Gyro2(imu, this);
+        Graph graph = new Graph(this);
+        graph.turnOn();
 
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
@@ -46,14 +48,87 @@ public class AutonomousMode extends LinearOpMode {
 
         //forwardColor(1.0);
 
-        forward(1.0, 64);
+        //forward(1.0, 64);
         // 64
 
         //TODO: Shoot 3 rings
-        sleep(3000);
+        //sleep(3000);
 
         // Park on the line
-        forward(1.0, 12);
+        //forward(1.0, 12);
+
+        forward(1, 108);
+        GraphResult result = graph.getPosition();
+        if(result.imageSee) {
+            telemetry.addData("x",result.x);
+            telemetry.addData("y",result.y);
+            telemetry.addData("orientation",result.orientation);
+
+            // TODO: if result.orientation > 5 degrees then turn right result.orientation degrees
+            if(result.orientation > 5) {
+                turnRight(result.orientation, 1);
+            }
+
+            // TODO: if result.orientation < -5 degrees then turn left abs(result.orientation degrees)
+            if(result.orientation < -5) {
+                turnLeft(-result.orientation, 1);
+            }
+
+            // TODO: if result.x < 36 then move forward 36 - result.x inches
+            if(result.x < 36) {
+                forward(1, 36-result.x);
+            }
+
+
+            // TODO: if result.x > 36 then move backwards result.x - 36 inches
+            if(result.x > 36) {
+                forward(-1, result.x-36);
+            }
+
+            // TODO: if result.y < 36 then slide left 36 - result.y
+            if(result.y < 36) {
+                chaChaRealSmooth(1, 36-result.y);
+            }
+
+            // TODO: if result.y > 36 then slide right result.y - 36
+            if(result.y > 36) {
+                chaChaRealSmooth(-1, result.y-36);
+            }
+
+        }
+        else {
+            telemetry.addData("no image :(", "");
+        }
+
+        graph.turnOff();
+    }
+
+    public void chaChaRealSmooth(double power, double length) {
+        // Turn on motors to slide
+        leftBack.setPower(-power);
+        leftFront.setPower(power);
+        rightBack.setPower(-power);
+        rightFront.setPower(power);
+
+        // Slide until encoder ticks are sufficient
+        while(opModeIsActive()) {
+            //absolute value of getCurrentPosition()
+            int tics = rightBack.getCurrentPosition();
+            if (tics < 0) {
+                tics = tics * -1;
+            }
+
+            if (tics > length*ticksPerInch){
+                break;
+            }
+            idle();
+        }
+
+        // Turn off motors
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
     }
 
     public void forward(double power, double length){
