@@ -17,6 +17,7 @@ public class AutonomousMode extends LinearOpMode {
     DcMotor rightFront;
     NormalizedColorSensor sensorColor;
     Gyro2 gyro;
+    Graph graph;
 
     float ticksPerInch = -122.15f;
 
@@ -24,7 +25,7 @@ public class AutonomousMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         gyro = new Gyro2(imu, this);
-        Graph graph = new Graph(this);
+        graph = new Graph(this);
         graph.turnOn();
 
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
@@ -101,6 +102,51 @@ public class AutonomousMode extends LinearOpMode {
         }
 
         graph.turnOff();
+    }
+
+    public void correct(double x, double y, double angle) {
+        GraphResult result = graph.getPosition();
+        if(result.imageSee) {
+            telemetry.addData("x",result.x);
+            telemetry.addData("y",result.y);
+            telemetry.addData("orientation",result.orientation);
+
+            // TODO: if result.orientation > 5 degrees then turn right result.orientation degrees
+            if(result.orientation > angle + 5) {
+                turnRight(result.orientation-angle, 1);
+            }
+
+            // TODO: if result.orientation < -5 degrees then turn left abs(result.orientation degrees)
+            if(result.orientation < angle - 5) {
+                turnLeft(angle-result.orientation, 1);
+            }
+
+            // TODO: if result.x < 36 then move forward 36 - result.x inches
+            if(result.x < x) {
+                forward(1, x-result.x);
+            }
+
+
+            // TODO: if result.x > 36 then move backwards result.x - 36 inches
+            if(result.x > x) {
+                forward(-1, result.x-x);
+            }
+
+            // TODO: if result.y < 36 then slide left 36 - result.y
+            if(result.y < y) {
+                chaChaRealSmooth(1, y-result.y);
+            }
+
+            // TODO: if result.y > 36 then slide right result.y - 36
+            if(result.y > y) {
+                chaChaRealSmooth(-1, result.y-y);
+            }
+
+        }
+        else {
+            telemetry.addData("no image :(", "");
+        }
+
     }
 
     public void chaChaRealSmooth(double power, double length) {
