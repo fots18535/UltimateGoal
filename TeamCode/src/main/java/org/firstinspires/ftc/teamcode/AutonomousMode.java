@@ -19,7 +19,7 @@ public class AutonomousMode extends LinearOpMode {
     Gyro2 gyro;
     Graph graph;
 
-    float ticksPerInch = -122.15f;
+    float ticksPerInch = 122.15f;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -56,49 +56,19 @@ public class AutonomousMode extends LinearOpMode {
         //sleep(3000);
 
         // Park on the line
-        //forward(1.0, 12);
+        //forward(1.0, 12)
 
-        forward(1, 108);
-        GraphResult result = graph.getPosition();
-        if(result.imageSee) {
-            telemetry.addData("x",result.x);
-            telemetry.addData("y",result.y);
-            telemetry.addData("orientation",result.orientation);
-
-            // TODO: if result.orientation > 5 degrees then turn right result.orientation degrees
-            if(result.orientation > 5) {
-                turnRight(result.orientation, 1);
-            }
-
-            // TODO: if result.orientation < -5 degrees then turn left abs(result.orientation degrees)
-            if(result.orientation < -5) {
-                turnLeft(-result.orientation, 1);
-            }
-
-            // TODO: if result.x < 36 then move forward 36 - result.x inches
-            if(result.x < 36) {
-                forward(1, 36-result.x);
-            }
+        //chaChaRealSmooth(1,20);
 
 
-            // TODO: if result.x > 36 then move backwards result.x - 36 inches
-            if(result.x > 36) {
-                forward(-1, result.x-36);
-            }
-
-            // TODO: if result.y < 36 then slide left 36 - result.y
-            if(result.y < 36) {
-                chaChaRealSmooth(1, 36-result.y);
-            }
-
-            // TODO: if result.y > 36 then slide right result.y - 36
-            if(result.y > 36) {
-                chaChaRealSmooth(-1, result.y-36);
-            }
-
-        }
-        else {
-            telemetry.addData("no image :(", "");
+        telemetry.addData("debug", "go forward");
+        forward(1, 100);
+        telemetry.addData("debug", "done");
+        telemetry.update();
+        sleep(2000);
+        correct(36, 36,0);
+        while(opModeIsActive()) {
+            idle();
         }
 
         graph.turnOff();
@@ -149,12 +119,20 @@ public class AutonomousMode extends LinearOpMode {
 
     }
 
+
+    // Positive power slides left
+    // Negative power slides right
     public void chaChaRealSmooth(double power, double length) {
+        // Reset the encoder to 0
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // Turn on motors to slide
         leftBack.setPower(-power);
-        leftFront.setPower(power);
+        leftFront.setPower(power*0.8);
         rightBack.setPower(-power);
-        rightFront.setPower(power);
+        rightFront.setPower(power*0.8);
 
         // Slide until encoder ticks are sufficient
         while(opModeIsActive()) {
@@ -194,6 +172,9 @@ public class AutonomousMode extends LinearOpMode {
             if (tics < 0) {
                 tics = tics * -1;
             }
+            //telemetry.addData("debug tics", tics);
+            //telemetry.addData("debug compare to ", length*ticksPerInch);
+
 
             if (tics > length*ticksPerInch){
                 break;
