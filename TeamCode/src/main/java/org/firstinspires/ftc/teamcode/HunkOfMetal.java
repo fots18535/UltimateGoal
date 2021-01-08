@@ -4,16 +4,20 @@ import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class HunkOfMetal {
     DcMotor leftBack;
     DcMotor leftFront;
     DcMotor rightBack;
     DcMotor rightFront;
+    DcMotor thrawr;
+    Servo poddle;
     NormalizedColorSensor sensorColor;
     Gyro2 gyro;
     Graph graph;
@@ -35,6 +39,8 @@ public class HunkOfMetal {
         leftFront = mode.hardwareMap.get(DcMotor.class, "leftFront");
         rightBack = mode.hardwareMap.get(DcMotor.class, "rightBack");
         rightFront = mode.hardwareMap.get(DcMotor.class, "rightFront");
+        thrawr = mode.hardwareMap.get(DcMotor.class, "thrower");
+        poddle = mode.hardwareMap.get(Servo.class, "paddle");
         sensorColor = mode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -262,6 +268,19 @@ public class HunkOfMetal {
         rightFront.setPower(0);
     }
 
+    public void turnOnThrower() {
+        thrawr.setPower(1.0);
+    }
+
+    public void turnOffThrower() {
+        thrawr.setPower(0.0);
+    }
+
+    public void throwRing() {
+        poddle.setPosition(0.5);
+        mode.sleep(200);
+        poddle.setPosition(0.0);
+    }
 }
 
 
