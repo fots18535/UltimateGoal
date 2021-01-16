@@ -56,6 +56,10 @@ public class HunkOfMetal {
         graph.turnOff();
     }
 
+    public int ringReturn() {
+        return 0;
+    }
+
     public void correct(double x, double y, double angle) {
         GraphResult result = graph.getPosition();
         if(result.imageSee) {
