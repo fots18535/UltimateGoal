@@ -22,6 +22,7 @@ public class HunkOfMetal {
     Gyro2 gyro;
     Graph graph;
     LinearOpMode mode;
+    Servo wrist;
 
     float ticksPerInch = 122.15f;
 
@@ -41,6 +42,7 @@ public class HunkOfMetal {
         rightFront = mode.hardwareMap.get(DcMotor.class, "rightFront");
         thrawr = mode.hardwareMap.get(DcMotor.class, "thrower");
         poddle = mode.hardwareMap.get(Servo.class, "paddle");
+        wrist = mode.hardwareMap.get(Servo.class, "wrist");
         sensorColor = mode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
