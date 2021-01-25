@@ -49,25 +49,30 @@ public class MecanumWheels extends LinearOpMode {
            double rightX =  -gamepad1.right_stick_x;
            double rightY =  gamepad1.right_stick_y;
 
-           if (gamepad1.a) {
-               thrower.setPower(1);
-           } else {
-               thrower.setPower(0);
-           }
+            // Ring thrower controller logic
+            if (gamepad1.a) {
+                thrower.setPower(1);
+            } else {
+                thrower.setPower(0);
+            }
 
-
+            // Ring conveyor control logic
             if (gamepad1.b) {
                 rollers.setPower(1.0);
             } else {
                 rollers.setPower(0);
             }
 
+            // Poddle control logic
+            // Poddle = ring flipper (paddle)
             if (gamepad1.right_bumper) {
                 poddle.setPosition(0.5);
                 sleep(200);
                 poddle.setPosition(0.0);
             }
 
+            // Wrist control logic
+            // Picks up the goal
             if(gamepad1.left_bumper) {
                 wrist.setPosition(0.0);
             }
@@ -75,6 +80,8 @@ public class MecanumWheels extends LinearOpMode {
                 wrist.setPosition(0.5);
             }
 
+            // Claw control logic
+            //POOP
             if(gamepad1.dpad_left) {
                 americaForever.setPower(-0.2);
             }
@@ -84,6 +91,8 @@ public class MecanumWheels extends LinearOpMode {
             else {
                 americaForever.setPower(0.0);
             }
+
+            // TODO: add logic for the sweeper
 
             // Setting the motor power based on the input
            leftBack.setPower(rightX + rightY + leftX);

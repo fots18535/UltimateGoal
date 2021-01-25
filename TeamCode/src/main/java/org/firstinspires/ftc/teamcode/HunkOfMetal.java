@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class HunkOfMetal {
     DcMotor leftBack;
@@ -23,6 +26,7 @@ public class HunkOfMetal {
     Graph graph;
     LinearOpMode mode;
     Servo wrist;
+    DistanceSensor diztance;
 
     float ticksPerInch = 122.15f;
 
@@ -44,6 +48,7 @@ public class HunkOfMetal {
         poddle = mode.hardwareMap.get(Servo.class, "paddle");
         wrist = mode.hardwareMap.get(Servo.class, "wrist");
         sensorColor = mode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        diztance = mode.hardwareMap.get(DistanceSensor.class, "diztance");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -287,6 +292,67 @@ public class HunkOfMetal {
         mode.sleep(200);
         poddle.setPosition(0.0);
     }
+
+    public int sensingDistance (double power, double length){
+        int numero = 0;
+        // Reset the encoder to 0
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        gyro.reset();
+        // Setting the motor power based on the input
+        motorsForward(1);
+
+        // Go forward and park behind the line
+        while(mode.opModeIsActive()) {
+            //absolute value of getCurrentPosition()
+            int tics = rightBack.getCurrentPosition();
+            if (tics < 0) {
+                tics = tics * -1;
+            }
+            // Get reading for distance sensor
+            double d = diztance.getDistance(DistanceUnit.INCH);
+            if(d < 6) {
+                numero = 4;
+            }
+            else if (d < 10) {
+                numero = 1;
+            }
+
+            //telemetry.addData("debug tics", tics);
+            //telemetry.addData("debug compare to ", length*ticksPerInch);
+
+
+            if (tics > length*ticksPerInch){
+                break;
+            }
+
+            // Check the angle and correct if needed
+            if (gyro.getAngle() >4) {
+                gyro.store();
+                turnRight(3, .3);
+                gyro.recall();
+                motorsForward(1);
+            } else if (gyro.getAngle() <-4) {
+                gyro.store();
+                turnLeft(3, .3);
+                gyro.recall();
+                motorsForward(1);
+            }
+
+
+            mode.idle();
+        }
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+
+        return numero;
+    }
+
 }
 
 
