@@ -26,6 +26,7 @@ public class HunkOfMetal {
     Graph graph;
     LinearOpMode mode;
     Servo wrist;
+    DcMotor americaForever;
     DistanceSensor diztance;
 
     float ticksPerInch = 122.15f;
@@ -45,10 +46,11 @@ public class HunkOfMetal {
         rightBack = mode.hardwareMap.get(DcMotor.class, "rightBack");
         rightFront = mode.hardwareMap.get(DcMotor.class, "rightFront");
         thrawr = mode.hardwareMap.get(DcMotor.class, "thrower");
-        poddle = mode.hardwareMap.get(Servo.class, "paddle");
+        poddle = mode.hardwareMap.get(Servo.class, "poddle");
         wrist = mode.hardwareMap.get(Servo.class, "wrist");
+        americaForever = mode.hardwareMap.get(DcMotor.class, "americaForever");
         sensorColor = mode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        diztance = mode.hardwareMap.get(DistanceSensor.class, "diztance");
+        //diztance = mode.hardwareMap.get(DistanceSensor.class, "diztance");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -156,7 +158,7 @@ public class HunkOfMetal {
 
         gyro.reset();
         // Setting the motor power based on the input
-        motorsForward(1);
+        motorsForward(power);
 
         // Go forward and park behind the line
         while(mode.opModeIsActive()) {
@@ -178,12 +180,12 @@ public class HunkOfMetal {
                 gyro.store();
                 turnRight(3, .3);
                 gyro.recall();
-                motorsForward(1);
+                motorsForward(power);
             } else if (gyro.getAngle() <-4) {
                 gyro.store();
                 turnLeft(3, .3);
                 gyro.recall();
-                motorsForward(1);
+                motorsForward(power);
             }
 
 
@@ -280,7 +282,7 @@ public class HunkOfMetal {
     }
 
     public void turnOnThrower() {
-        thrawr.setPower(1.0);
+        thrawr.setPower(0.88);
     }
 
     public void turnOffThrower() {
@@ -289,8 +291,22 @@ public class HunkOfMetal {
 
     public void throwRing() {
         poddle.setPosition(0.5);
-        mode.sleep(200);
-        poddle.setPosition(0.0);
+        mode.sleep(300);
+        poddle.setPosition(1.0);
+    }
+
+    public void wristUp() {
+        wrist.setPosition(0.0);
+    }
+
+    public void wristDown() {
+        wrist.setPosition(0.5);
+    }
+
+    public void clawOpen() {
+        americaForever.setPower(-1.0);
+        mode.sleep(250);
+        americaForever.setPower(0.0);
     }
 
     public int sensingDistance (double power, double length){

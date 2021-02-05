@@ -21,7 +21,7 @@ public class AutonomousSimple extends LinearOpMode {
         waitForStart();
 
         // Go forward 62 inches, but give a few inches of buffer
-        hunk.forward(1, 58);
+        hunk.forward(1, 45);
 
         // Shoot 3 rings
         hunk.turnOnThrower();
@@ -31,10 +31,11 @@ public class AutonomousSimple extends LinearOpMode {
         hunk.throwRing();
         sleep(1000);
         hunk.throwRing();
+        sleep(1000);
         hunk.turnOffThrower();
 
         // Park over the line
-        hunk.forward(1, 10);
+        hunk.forward(1, 28);
 
         // Shut down
         hunk.arret();
