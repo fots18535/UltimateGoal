@@ -37,8 +37,8 @@ public class MainDriver extends LinearOpMode {
        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-       rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+       // leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+       // rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -79,19 +79,18 @@ public class MainDriver extends LinearOpMode {
 
             // Wrist control logic
             // Picks up the goal
-            if(gamepad1.left_bumper) {
-                wrist.setPosition(0.6);
+            if(gamepad2.dpad_down) {
+                wrist.setPosition(0.45);
             }
-            else {
+            else if (gamepad2.dpad_up){
                 wrist.setPosition(0.0);
             }
 
             // Claw control logic
-            //POOP
-            if(gamepad1.dpad_left) {
+            if(gamepad2.b) {
                 americaForever.setPower(-0.75);
             }
-            else if (gamepad1.dpad_right) {
+            else if (gamepad2.x) {
                 americaForever.setPower(0.75);
 
             }
