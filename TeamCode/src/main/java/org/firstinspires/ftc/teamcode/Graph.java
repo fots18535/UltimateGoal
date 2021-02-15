@@ -41,6 +41,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +53,15 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+/**
+ * Finds the robot coordinates using Vuforia
+ * Gets a list of possible ring stack recognitions (sent to the TF Processor for analysis)
+ */
 public class Graph {
     private LinearOpMode opMode;
+
+    private TFObjectDetector tfod = null;
+
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     VuforiaTrackables targetsUltimateGoal;
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -232,7 +241,7 @@ public class Graph {
         targetsUltimateGoal.activate();
     }
 
-public GraphResult getPosition() {
+    public GraphResult getPosition() {
         // Create a graph result to return
         GraphResult result = new GraphResult();
         result.imageSee = false;
@@ -276,8 +285,49 @@ public GraphResult getPosition() {
         return result;
 }
 
-public void turnOff() {
-// Disable Tracking when we are done;
+    public void turnOff() {
+        // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
+    }
+
+    ///////////////////////// Tensor Flow Section //////////////////////////////
+
+    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Quad";
+    private static final String LABEL_SECOND_ELEMENT = "Single";
+
+    // Only call this after calling turnOn()
+    public void turnOnTfod() {
+        initTfod();
+        tfod.activate();
+        tfod.setZoom(1.0, 16.0 / 9.0);
+    }
+
+    // Must be called before turnOff() - TF needs an active Vuforia instance
+    public void turnOffTfod() {
+        tfod.shutdown();
+        tfod.deactivate();
+        tfod = null;
+    }
+
+    // Only call this after calling turnOnTfod() - TF needs an active Vuforia instance
+    public List<Recognition> getTFDetections() {
+
+        List<Recognition> recs = null;
+        if (tfod != null) {
+            // Example uses getUpdatedRecognitions()
+            recs = tfod.getRecognitions();
+        }
+
+        return recs;
+    }
+
+    private void initTfod() {
+        int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.useObjectTracker = false;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 }
