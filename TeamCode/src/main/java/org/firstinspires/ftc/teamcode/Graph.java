@@ -322,6 +322,20 @@ public class Graph {
         return recs;
     }
 
+    public List<Recognition> waitForTFDetections() {
+
+        List<Recognition> recs = null;
+        if (tfod != null) {
+            recs = tfod.getUpdatedRecognitions();
+            while(recs == null) {
+                opMode.sleep(200);
+                recs = tfod.getUpdatedRecognitions();
+            }
+        }
+
+        return recs;
+    }
+
     private void initTfod() {
         int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);

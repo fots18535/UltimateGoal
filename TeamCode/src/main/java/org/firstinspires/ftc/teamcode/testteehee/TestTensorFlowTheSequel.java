@@ -20,10 +20,11 @@ public class TestTensorFlowTheSequel extends LinearOpMode {
         g.turnOnTfod();
 
         while (opModeIsActive()) {
-            List<Recognition> recs = g.getTFDetections();
+            List<Recognition> recs = g.waitForTFDetections();
             int ringCount = p.getRings(recs);
 
-            telemetry.addData("chicken? RING COUNT", ringCount);
+            telemetry.addData("" +
+                    "RING COUNT", ringCount);
             telemetry.update();
         }
 

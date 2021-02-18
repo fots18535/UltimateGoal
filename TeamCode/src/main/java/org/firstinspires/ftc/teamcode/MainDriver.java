@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @TeleOp
 public class MainDriver extends LinearOpMode {
@@ -18,6 +19,8 @@ public class MainDriver extends LinearOpMode {
     Servo poddle;
     Servo wrist;
     DcMotor americaForever;
+    TouchSensor cmax;
+    TouchSensor cmin;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,15 +33,15 @@ public class MainDriver extends LinearOpMode {
         poddle = hardwareMap.get(Servo.class, "poddle");
         wrist = hardwareMap.get(Servo.class, "wrist");
         americaForever = hardwareMap.get(DcMotor.class, "americaForever");
-
+        cmax = hardwareMap.get(TouchSensor.class, "clawMax");
+        cmin = hardwareMap.get(TouchSensor.class, "clawMin");
 
         // Stops coasting
        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-       // rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+       americaForever.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
 
@@ -80,25 +83,23 @@ public class MainDriver extends LinearOpMode {
             // Wrist control logic
             // Picks up the goal
             if(gamepad2.dpad_down) {
-                wrist.setPosition(0.45);
+                wrist.setPosition(0.5);
             }
             else if (gamepad2.dpad_up){
                 wrist.setPosition(0.0);
             }
 
             // Claw control logic
-            if(gamepad2.b) {
-                americaForever.setPower(-0.75);
+            if(gamepad2.b && !cmax.isPressed()) {
+                americaForever.setPower(-0.4);
             }
-            else if (gamepad2.x) {
-                americaForever.setPower(0.75);
+            else if (gamepad2.x && !cmin.isPressed()) {
+                americaForever.setPower(0.4);
 
             }
             else {
                 americaForever.setPower(0.0);
             }
-
-            // TODO: add logic for the sweeper
 
             // Setting the motor power based on the input
            leftBack.setPower(rightX + rightY + leftX);
