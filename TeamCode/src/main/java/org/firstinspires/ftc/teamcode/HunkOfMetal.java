@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -28,6 +29,7 @@ public class HunkOfMetal {
     Servo wrist;
     DcMotor americaForever;
     DistanceSensor diztance;
+    TouchSensor cmax;
 
     float ticksPerInch = 122.15f;
 
@@ -50,6 +52,7 @@ public class HunkOfMetal {
         wrist = mode.hardwareMap.get(Servo.class, "wrist");
         americaForever = mode.hardwareMap.get(DcMotor.class, "americaForever");
         sensorColor = mode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        cmax = mode.hardwareMap.get(TouchSensor.class, "clawMax");
         //diztance = mode.hardwareMap.get(DistanceSensor.class, "diztance");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -282,7 +285,7 @@ public class HunkOfMetal {
     }
 
     public void turnOnThrower() {
-        thrawr.setPower(0.88);
+        thrawr.setPower(0.93);
     }
 
     public void turnOffThrower() {
@@ -304,8 +307,10 @@ public class HunkOfMetal {
     }
 
     public void clawOpen() {
-        americaForever.setPower(-1.0);
-        mode.sleep(250);
+        americaForever.setPower(-0.4);
+        while(!cmax.isPressed()) {
+            mode.idle();
+        }
         americaForever.setPower(0.0);
     }
 

@@ -41,6 +41,8 @@ public class AutonomousSimpleWithGoal extends LinearOpMode {
         hunk.wristDown();
         sleep(500);
         hunk.clawOpen();
+        sleep(800);
+        hunk.wristUp();
 
         // SUCK IT!
         // tHAT WAS jasmine
