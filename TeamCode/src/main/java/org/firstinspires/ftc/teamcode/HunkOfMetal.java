@@ -285,7 +285,7 @@ public class HunkOfMetal {
     }
 
     public void turnOnThrower() {
-        thrawr.setPower(0.93);
+        thrawr.setPower(0.88);
     }
 
     public void turnOffThrower() {

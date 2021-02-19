@@ -56,7 +56,7 @@ public class MainDriver extends LinearOpMode {
             if (gamepad1.a) {
                 thrower.setPower(0.9);
             } else if(gamepad1.b){
-                thrower.setPower(0.8);
+                thrower.setPower(0.74);
             } else {
                 thrower.setPower(0);
             }
