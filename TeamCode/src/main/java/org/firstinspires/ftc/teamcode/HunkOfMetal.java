@@ -248,7 +248,7 @@ public class HunkOfMetal {
 
         // Go forward and park behind the line
         while(mode.opModeIsActive()) {
-            if (gyro.getAngle()<= -howFar){
+            if (gyro.getAngle()<= -howFar){ //change
                 break;
             }
 
@@ -372,6 +372,18 @@ public class HunkOfMetal {
         rightFront.setPower(0);
 
         return numero;
+    }
+
+    public void throwRings(){
+        turnOnThrower();
+        mode.sleep(2000);
+        throwRing();
+        mode.sleep(1000);
+        throwRing();
+        mode.sleep(1000);
+        throwRing();
+        mode.sleep(1000);
+        turnOffThrower();
     }
 
 }

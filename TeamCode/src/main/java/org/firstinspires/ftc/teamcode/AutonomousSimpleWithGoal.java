@@ -44,12 +44,7 @@ public class AutonomousSimpleWithGoal extends LinearOpMode {
         sleep(800);
         hunk.wristUp();
 
-        // SUCK IT!
-        // tHAT WAS jasmine
-        // WE WILL DESTROY YOU!
-        // YES.
-
-        // BACK UP TO FART OVER THE LINE
+        // BACK UP OVER THE LINE
         hunk.forward(-1, 30);
 
         // Goodnight sonny
