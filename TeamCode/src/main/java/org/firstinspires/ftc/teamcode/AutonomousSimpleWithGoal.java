@@ -35,7 +35,7 @@ public class AutonomousSimpleWithGoal extends LinearOpMode {
         hunk.forward(1,41);
 
         // Slide to the left (EVERYBODY CLAP YOUR HANDS)
-        hunk.chaChaRealSmooth(1.0, 10);
+        hunk.chaChaRealSmooth(1.0, 19);
 
         // Dr0p GoAl AHHHHHHHHHHH U R GOING TO DIE
         hunk.wristDown();

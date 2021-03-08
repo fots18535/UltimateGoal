@@ -40,8 +40,8 @@ public class HunkOfMetal {
     public void initialize() {
         BNO055IMU imu = mode.hardwareMap.get(BNO055IMU.class, "imu");
         gyro = new Gyro2(imu, mode);
-        graph = new Graph(mode);
-        graph.turnOn();
+        //graph = new Graph(mode);
+        //graph.turnOn();
 
         leftBack = mode.hardwareMap.get(DcMotor.class, "leftBack");
         leftFront = mode.hardwareMap.get(DcMotor.class, "leftFront");

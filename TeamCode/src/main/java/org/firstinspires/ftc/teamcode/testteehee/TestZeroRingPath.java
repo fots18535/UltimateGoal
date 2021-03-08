@@ -12,7 +12,6 @@ public class TestZeroRingPath extends LinearOpMode {
         HunkOfMetal hunk = new HunkOfMetal(this);
         hunk.initialize();
         waitForStart();
-
         hunk.forward(1, 60);
         hunk.throwRings();
         hunk.forward(1, 8);
