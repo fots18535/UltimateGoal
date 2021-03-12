@@ -24,31 +24,55 @@ public class AutonomousComplete extends LinearOpMode{
         graph.turnOn();
         graph.turnOnTfod();
 
+        sleep(2000);
+
         telemetry.addData("Status", "Ready");
         telemetry.update();
 
         waitForStart();
 
-        // TODO: move forward to get within 20 inches of rings
-
-        //hunk.forward(1,20);
+        // Move forward to get within 20 inches of rings :)
+        hunk.forward(1,12);
         sleep(1000);
 
-        // TODO: get list of recognitions and send to TFProcessor to get number of rings
+        //VARIABLES :)
 
-        List<Recognition> recs = graph.getTFDetections();
-        TFProcessor tf = new TFProcessor();
-        int rings = tf.getRings(recs);
-        while (rings == -1 && opModeIsActive()) {
-            recs = graph.getTFDetections();
+        int zerp = 0;
+        int onerp = 0;
+        int fourerp = 0;
+        int rings = 0;
+
+        for(int i = 0; i < 10; i++) {
+            // Get list of recognitions and send to TFProcessor to get number of rings
+            List<Recognition> recs = graph.getTFDetections();
+            TFProcessor tf = new TFProcessor();
             rings = tf.getRings(recs);
+            while (rings == -1 && opModeIsActive()) {
+                recs = graph.getTFDetections();
+                //DEMOLISH THEM FRODO :) ;)
+                rings = tf.getRings(recs);
+            }
+
+            if(rings == 0){
+                zerp++;
+            } else if(rings == 1) {
+                onerp++;
+            } else if (rings == 4) {
+                fourerp++;
+            }
         }
-        telemetry.addData("Rings", rings);
+
+        telemetry.addData("zero", zerp);
+        telemetry.addData("one", onerp);
+        telemetry.addData("four", fourerp);
         telemetry.update();
 
-        if (rings==0){
-            hunk.forward(1, 60);
-            hunk.throwRings();
+        hunk.wristUp();
+        hunk.forward(1, 48);
+        hunk.throwRings();
+
+        // Do the path for the correct number of rings
+        if (zerp > onerp && zerp > fourerp) {
             hunk.forward(1, 8);
             hunk.turnLeft(180, 0.8);
             // hunk.chaChaRealSmooth(-1, 20);
@@ -59,23 +83,7 @@ public class AutonomousComplete extends LinearOpMode{
             hunk.wristUp();
             // hunk.chaChaRealSmooth(1, 12);
         }
-        else if (rings==1){
-            hunk.wristUp();
-
-            // Go forward 62 inches, but give a few inches of buffer
-            hunk.forward(1, 60);
-
-            // Shoot 3 rings SUPRISE SHAWTY
-            hunk.turnOnThrower();
-            sleep(4000);
-            hunk.throwRing();
-            sleep(1000);
-            hunk.throwRing();
-            sleep(1000);
-            hunk.throwRing();
-            sleep(1000);
-            hunk.turnOffThrower();
-
+        else if (onerp > zerp && onerp > fourerp){
             // g0 F0rwArD 46 iNcHeS
             hunk.forward(1,41);
 
@@ -92,9 +100,7 @@ public class AutonomousComplete extends LinearOpMode{
             // BACK UP OVER THE LINE
             hunk.forward(-1, 30);
         }
-        else if (rings==4){
-            hunk.forward(1, 60);
-            hunk.throwRings();
+        else if (fourerp > zerp && fourerp > onerp){
             hunk.turnLeft(180,1);
             hunk.forward(-1,60);
             hunk.wristDown();
@@ -108,6 +114,5 @@ public class AutonomousComplete extends LinearOpMode{
         graph.turnOffTfod();
         graph.turnOff();
 
-        // TODO: if ring count == 0 then do this, else if ring count == 1 then do this...
     }
 }
