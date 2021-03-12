@@ -45,6 +45,9 @@ public class MainDriver extends LinearOpMode {
 
         waitForStart();
 
+        HunkOfMetal hunk = new HunkOfMetal(this);
+        hunk.initialize();
+
         while (opModeIsActive()) {
             //Get the input from the gamepad controller
            double leftX =   gamepad1.left_stick_x;
@@ -56,7 +59,13 @@ public class MainDriver extends LinearOpMode {
             if (gamepad1.a) {
                 thrower.setPower(0.9);
             } else if(gamepad1.b){
+                // Power shot one touch
                 thrower.setPower(0.74);
+                hunk.throwRing();
+                hunk.chaChaRealSmooth(1,6);
+                hunk.throwRing();
+                hunk.chaChaRealSmooth(1,6);
+                hunk.throwRing();
             } else {
                 thrower.setPower(0);
             }
