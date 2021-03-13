@@ -70,15 +70,6 @@ public class MainDriver extends LinearOpMode {
                 thrower.setPower(0);
             }
 
-            // Ring thrower controller logic
-            if (gamepad1.a) {
-                thrower.setPower(0.9);
-            } else if(gamepad1.b){
-                thrower.setPower(0.74);
-            } else {
-                thrower.setPower(0);
-            }
-
 
             // Ring conveyor control logic
             if (gamepad1.dpad_up || gamepad1.right_stick_y > 0.25) {
