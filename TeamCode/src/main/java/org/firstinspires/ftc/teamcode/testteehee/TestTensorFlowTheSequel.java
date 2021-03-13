@@ -68,7 +68,7 @@ public class TestTensorFlowTheSequel extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()) {
-            idle();
+            idle(); //
         }
     }
 }
