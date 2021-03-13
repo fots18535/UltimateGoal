@@ -45,12 +45,30 @@ public class MainDriver extends LinearOpMode {
 
         waitForStart();
 
+        HunkOfMetal hunk = new HunkOfMetal(this);
+        hunk.initialize();
+
         while (opModeIsActive()) {
             //Get the input from the gamepad controller
            double leftX =   gamepad1.left_stick_x;
            double leftY =   gamepad1.left_stick_y;
            double rightX =  -gamepad1.right_stick_x;
            double rightY =  gamepad1.right_stick_y;
+
+            // Ring thrower controller logic
+            if (gamepad1.a) {
+                thrower.setPower(0.9);
+            } else if(gamepad1.b){
+                // Power shot one touch throw
+                thrower.setPower(0.74);
+                hunk.throwRing();
+                hunk.chaChaRealSmooth(1,6);
+                hunk.throwRing();
+                hunk.chaChaRealSmooth(1,6);
+                hunk.throwRing();
+            } else {
+                thrower.setPower(0);
+            }
 
             // Ring thrower controller logic
             if (gamepad1.a) {
