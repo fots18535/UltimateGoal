@@ -24,7 +24,7 @@ public class AutonomousComplete extends LinearOpMode{
         graph.turnOn();
         graph.turnOnTfod();
 
-        sleep(2000);
+        sleep(1000);
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
@@ -33,7 +33,7 @@ public class AutonomousComplete extends LinearOpMode{
 
         // Move forward to get within 20 inches of rings :)
         hunk.forward(1,12);
-        sleep(1000);
+        sleep(2000);
 
         //VARIABLES :)
 
@@ -101,7 +101,7 @@ public class AutonomousComplete extends LinearOpMode{
             hunk.forward(-1, 30);
         }
         else if (fourerp > zerp && fourerp > onerp){
-            hunk.turnLeft(180,1);
+            hunk.turnLeft(170,1);
             hunk.forward(-1,60);
             hunk.wristDown();
             sleep(500);

@@ -35,6 +35,7 @@ public class TestTensorFlowTheSequel extends LinearOpMode {
 
         // Move forward to get within 20 inches of rings :)
         hunk.forward(1, 12);
+        sleep(2000);
 
         //VARIABLES :)
         int zerp = 0;

@@ -57,7 +57,7 @@ public class MainDriver extends LinearOpMode {
 
             // Ring thrower controller logic
             if (gamepad1.a) {
-                thrower.setPower(0.9);
+                thrower.setPower(1.0);
             } else if(gamepad1.b){
                 // Power shot one touch throw
                 thrower.setPower(0.84);
