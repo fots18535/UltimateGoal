@@ -61,10 +61,13 @@ public class MainDriver extends LinearOpMode {
             } else if(gamepad1.b){
                 // Power shot one touch throw
                 thrower.setPower(0.74);
+                sleep(1000);
                 hunk.throwRing();
-                hunk.chaChaRealSmooth(1,6);
+                sleep(1000);
+                hunk.chaChaRealSmooth(-1,10);
                 hunk.throwRing();
-                hunk.chaChaRealSmooth(1,6);
+                sleep(1000);
+                hunk.chaChaRealSmooth(-1,10);
                 hunk.throwRing();
             } else {
                 thrower.setPower(0);
