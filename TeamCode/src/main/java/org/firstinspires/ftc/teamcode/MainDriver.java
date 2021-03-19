@@ -73,13 +73,16 @@ public class MainDriver extends LinearOpMode {
                 elapsedTime = newTime - oldTime;
                 clicksPerSecond = elapsedPosition / elapsedTime;
 
+                telemetry.addData("Clicks",elapsedPosition);
+                telemetry.addData("Time",elapsedTime);
                 telemetry.addData("ClicksPerMilSec",clicksPerSecond);
                 telemetry.update();
+
                 oldPosition = newPosition;
                 oldTime = newTime;
 
             } else if(gamepad1.b){
-                // Power shot one touch throw
+                // One Push Power Shots
                 thrower.setPower(0.84);
                 sleep(2000);
                 hunk.throwRing();
