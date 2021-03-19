@@ -48,6 +48,15 @@ public class MainDriver extends LinearOpMode {
         HunkOfMetal hunk = new HunkOfMetal(this);
         hunk.initialize();
 
+        // thrower speed calculation variables
+        long oldPosition = 0;
+        long newPosition = 0;
+        long elapsedPosition = 0;
+        long oldTime = 0;
+        long newTime = 0;
+        long elapsedTime = 0;
+        long clicksPerSecond =0;
+
         while (opModeIsActive()) {
             //Get the input from the gamepad controller
            double leftX =   gamepad1.left_stick_x;
@@ -58,6 +67,17 @@ public class MainDriver extends LinearOpMode {
             // Ring thrower controller logic
             if (gamepad1.a) {
                 thrower.setPower(1.0);
+                newPosition = thrower.getCurrentPosition();
+                newTime = System.currentTimeMillis();
+                elapsedPosition = newPosition - oldPosition;
+                elapsedTime = newTime - oldTime;
+                clicksPerSecond = elapsedPosition / elapsedTime;
+
+                telemetry.addData("ClicksPerMilSec",clicksPerSecond);
+                telemetry.update();
+                oldPosition = newPosition;
+                oldTime = newTime;
+
             } else if(gamepad1.b){
                 // Power shot one touch throw
                 thrower.setPower(0.84);
