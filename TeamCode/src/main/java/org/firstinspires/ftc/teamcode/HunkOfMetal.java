@@ -178,18 +178,25 @@ public class HunkOfMetal {
                 break;
             }
 
+            // TODO: get the angle and adjust the power to correct
+            float rightX = (float) gyro.getAngle();
+            leftBack.setPower(rightX + power);
+            leftFront.setPower(rightX + power);
+            rightBack.setPower(rightX - power);
+            rightFront.setPower(rightX - power);
+
             // Check the angle and correct if needed
-            if (gyro.getAngle() >4) {
-                gyro.store();
-                turnRight(3, .3);
-                gyro.recall();
-                motorsForward(power);
-            } else if (gyro.getAngle() <-4) {
-                gyro.store();
-                turnLeft(3, .3);
-                gyro.recall();
-                motorsForward(power);
-            }
+//            if (gyro.getAngle() >4) {
+//                gyro.store();
+//                turnRight(3, .3);
+//                gyro.recall();
+//                motorsForward(power);
+//            } else if (gyro.getAngle() <-4) {
+//                gyro.store();
+//                turnLeft(3, .3);
+//                gyro.recall();
+//                motorsForward(power);
+//            }
 
 
             mode.idle();
