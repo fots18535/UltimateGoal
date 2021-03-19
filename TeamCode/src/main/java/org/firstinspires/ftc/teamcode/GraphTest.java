@@ -27,7 +27,8 @@ public class GraphTest extends LinearOpMode {
                    telemetry.addData("turn left", -result.orientation);
                }
 
-               // TODO: if result.x < 36 then move forward 36 - result.x inches
+               // TODO: if result.x < 36 then move forward 36 - result.x +
+               //  inches
                if(result.x < 36) {
                    telemetry.addData("forward", 36-result.x);
                }
