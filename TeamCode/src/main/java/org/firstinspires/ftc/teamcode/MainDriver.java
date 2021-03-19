@@ -72,7 +72,7 @@ public class MainDriver extends LinearOpMode {
                 elapsedPosition = newPosition - oldPosition;
                 elapsedTime = newTime - oldTime;
                 clicksPerSecond = elapsedPosition / elapsedTime;
-
+//
                 telemetry.addData("Clicks",elapsedPosition);
                 telemetry.addData("Time",elapsedTime);
                 telemetry.addData("ClicksPerMilSec",clicksPerSecond);
