@@ -179,7 +179,7 @@ public class HunkOfMetal {
             }
 
             // TODO: get the angle and adjust the power to correct
-            float rightX = (float) gyro.getAngle();
+            float rightX = (float) -gyro.getAngle();
             leftBack.setPower(rightX + power);
             leftFront.setPower(rightX + power);
             rightBack.setPower(rightX - power);

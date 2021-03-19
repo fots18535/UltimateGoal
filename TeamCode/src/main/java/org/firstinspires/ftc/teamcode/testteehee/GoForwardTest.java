@@ -15,6 +15,6 @@ public class GoForwardTest extends LinearOpMode {
         waitForStart();
 
         hunk.forward(1, 30);
-        hunk.arret();
+        //hunk.arret();
     }
 }
