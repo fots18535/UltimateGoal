@@ -68,7 +68,7 @@ public class AutonomousComplete extends LinearOpMode{
         telemetry.update();
 
         hunk.wristUp();
-        hunk.forward(1, 48);
+        hunk.forward(1, 46);
         hunk.throwRings();
 
         // Do the path for the correct number of rings
