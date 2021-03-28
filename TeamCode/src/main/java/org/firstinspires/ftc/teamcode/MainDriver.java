@@ -55,7 +55,10 @@ public class MainDriver extends LinearOpMode {
         long oldTime = 0;
         long newTime = 0;
         long elapsedTime = 0;
-        long clicksPerSecond =0;
+        float clicksPerSecond =0;
+        boolean aButtonHeld = false;
+
+
 
         while (opModeIsActive()) {
             //Get the input from the gamepad controller
@@ -66,20 +69,29 @@ public class MainDriver extends LinearOpMode {
 
             // Ring thrower controller logic
             if (gamepad1.a) {
+                if (aButtonHeld==false) {
+                    aButtonHeld=true;
+                    oldPosition = thrower.getCurrentPosition();
+                    oldTime = System.currentTimeMillis();
+                }
                 thrower.setPower(1.0);
                 newPosition = thrower.getCurrentPosition();
                 newTime = System.currentTimeMillis();
                 elapsedPosition = newPosition - oldPosition;
                 elapsedTime = newTime - oldTime;
-                clicksPerSecond = elapsedPosition / elapsedTime;
 
-                telemetry.addData("Clicks",elapsedPosition);
-                telemetry.addData("Time",elapsedTime);
-                telemetry.addData("ClicksPerMilSec",clicksPerSecond);
-                telemetry.update();
+                //only measure after x milliseconds
+                if (elapsedTime > 1000) {
+                    clicksPerSecond = elapsedPosition / elapsedTime;
 
-                oldPosition = newPosition;
-                oldTime = newTime;
+                    telemetry.addData("Clicks", elapsedPosition);
+                    telemetry.addData("Time", elapsedTime);
+                    telemetry.addData("ClicksPerMilSec", clicksPerSecond);
+                    telemetry.update();
+
+                    oldPosition = newPosition;
+                    oldTime = newTime;
+                }
 
             } else if(gamepad1.b){
                 // One Push Power Shots
@@ -95,6 +107,7 @@ public class MainDriver extends LinearOpMode {
                 sleep(2000);
             } else {
                 thrower.setPower(0);
+                aButtonHeld=false;
             }
 
 
