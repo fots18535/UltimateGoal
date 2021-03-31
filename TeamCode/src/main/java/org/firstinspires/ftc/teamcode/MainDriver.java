@@ -55,7 +55,8 @@ public class MainDriver extends LinearOpMode {
         long oldTime = 0;
         long newTime = 0;
         long elapsedTime = 0;
-        float clicksPerSecond =0;
+        float clicksPerMilliSecond =0;
+        long scaledClicksPerSecond =0;
         boolean aButtonHeld = false;
 
 
@@ -74,7 +75,7 @@ public class MainDriver extends LinearOpMode {
                     oldPosition = thrower.getCurrentPosition();
                     oldTime = System.currentTimeMillis();
                 }
-                thrower.setPower(1.0);
+                thrower.setPower(0.9);
                 newPosition = thrower.getCurrentPosition();
                 newTime = System.currentTimeMillis();
                 elapsedPosition = newPosition - oldPosition;
@@ -82,11 +83,13 @@ public class MainDriver extends LinearOpMode {
 
                 //only measure after x milliseconds
                 if (elapsedTime > 1000) {
-                    clicksPerSecond = elapsedPosition / elapsedTime;
+                    clicksPerMilliSecond = elapsedPosition / elapsedTime;
+                    scaledClicksPerSecond = elapsedPosition * 1000 / elapsedTime;
 
                     telemetry.addData("Clicks", elapsedPosition);
                     telemetry.addData("Time", elapsedTime);
-                    telemetry.addData("ClicksPerMilSec", clicksPerSecond);
+                    telemetry.addData("ClicksPerMilSec", clicksPerMilliSecond);
+                    telemetry.addData("scaledClicksPerSecond", scaledClicksPerSecond);
                     telemetry.update();
 
                     oldPosition = newPosition;
@@ -95,20 +98,23 @@ public class MainDriver extends LinearOpMode {
 
             } else if(gamepad1.b){
                 // One Push Power Shots
-                thrower.setPower(0.84);
+                thrower.setPower(0.78);
                 sleep(2000);
                 hunk.throwRing();
                 sleep(2000);
-                hunk.chaChaRealSmooth(-1,10);
+                hunk.chaChaRealSmooth(-1,6);
+                hunk.turnRight(2,0.5);
                 hunk.throwRing();
                 sleep(2000);
-                hunk.chaChaRealSmooth(-1,10);
+                hunk.chaChaRealSmooth(-1,6);
+                //hunk.turnRight(2,0.5);
                 hunk.throwRing();
                 sleep(2000);
             } else {
                 thrower.setPower(0);
                 aButtonHeld=false;
             }
+
 
 
             // Ring conveyor control logic

@@ -15,7 +15,8 @@ public class AutonomousComplete extends LinearOpMode{
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
-        HunkOfMetal hunk = new HunkOfMetal(this);
+        HunkOfMetal hunk = new HunkOfMetal(
+                this);
         hunk.initialize();
 
         // TODO: initialize a Graph object and turn on Vuforia and TF
