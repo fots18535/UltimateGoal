@@ -69,14 +69,14 @@ public class AutonomousComplete extends LinearOpMode{
         telemetry.update();
 
         hunk.wristUp();
-        hunk.forward(1, 46);
+        hunk.forward(1, 44);
         hunk.throwRings();
 
         // Do the path for the correct number of rings
         if (zerp > onerp && zerp > fourerp) {
             hunk.forward(1, 8);
             hunk.turnLeft(180, 0.8);
-            // hunk.chaChaRealSmooth(-1, 20);
+             hunk.chaChaRealSmooth(-1, 8);
             hunk.wristDown();
             sleep(500);
             hunk.clawOpen();
